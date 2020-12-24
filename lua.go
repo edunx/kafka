@@ -38,6 +38,7 @@ func CreateKafkaUserData(L *lua.LState) int {
 			limit:       opt.CheckInt("limit", 0),
 			heartbeat:   opt.CheckInt("heartbeat", 5),
 			timeout:     opt.CheckInt("timeout", 30), //30s
+			thread:     opt.CheckInt("thread", 10), //10 thread 
 			compression: opt.CheckString("compression", "none"),
 		},
 	}
