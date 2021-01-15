@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"context"
+	pub "github.com/edunx/public"
 	"golang.org/x/time/rate"
 )
 
@@ -17,7 +18,7 @@ func (lt *Limiter) Handler( name string , id int) {
 
 	err := lt.limit.Wait(lt.ctx)
 	if err != nil {
-		Out.Err("%s thread.id=%d limit wait err: %v", name, id, err)
+		pub.Out.Err("%s thread.id=%d limit wait err: %v", name, id, err)
 		return
 	}
 }

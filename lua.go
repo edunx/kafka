@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"github.com/edunx/lua"
+	pub "github.com/edunx/public"
 	"github.com/spf13/cast"
 )
 
@@ -43,7 +44,7 @@ func CreateKafkaUserData(L *lua.LState) int {
 		},
 	}
 
-	Out.Debug("kafka connection config info is: %v", kfk.C)
+	pub.Out.Debug("kafka connection config info is: %v", kfk.C)
 	if err := kfk.Start(); err != nil {
 		L.RaiseError("%s kafka start err:%v", kfk.C.name, err)
 		return 0
@@ -54,7 +55,7 @@ func CreateKafkaUserData(L *lua.LState) int {
 	return 1
 }
 
-func LuaInjectApi(L *lua.LState, parent *lua.LTable, output Logger) {
+func LuaInjectApi(L *lua.LState, parent *lua.LTable) {
 	mt := L.NewTypeMetatable(MT)
 
 	//获取字段
@@ -64,9 +65,6 @@ func LuaInjectApi(L *lua.LState, parent *lua.LTable, output Logger) {
 	L.SetField(mt, "__newindex", L.NewFunction(Set))
 
 	L.SetField(parent, "kafka", L.NewFunction(CreateKafkaUserData))
-
-	//注入日志输出方法
-	Out = output
 }
 
 func Get(L *lua.LState) int {
