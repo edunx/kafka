@@ -8,20 +8,6 @@ const (
 	OK
 )
 
-var (
-	Out Logger
-)
-
-type Message interface {
-	Byte() []byte
-}
-
-type Logger interface {
-	Err(format string, v ...interface{})
-	Info(format string, v ...interface{})
-	Debug(format string, v ...interface{})
-}
-
 type Config struct {
 	name        string
 	addr        string // 192.168.1.1:9092,192.168.1.2:9092

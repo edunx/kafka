@@ -3,7 +3,7 @@ package kafka
 import (
 	"github.com/edunx/lua"
 	"github.com/spf13/cast"
-    pub "github.com/edunx/public"
+	pub "github.com/edunx/public"
 )
 
 const (
@@ -55,7 +55,11 @@ func CreateKafkaUserData(L *lua.LState) int {
 	return 1
 }
 
+<<<<<<< HEAD
 func LuaInjectApi(L *lua.LState, parent *lua.LTable ) {
+=======
+func LuaInjectApi(L *lua.LState, parent *lua.LTable) {
+>>>>>>> 9a84f0de0927d8630682753bdf0f80e16898e056
 	mt := L.NewTypeMetatable(MT)
 
 	//获取字段

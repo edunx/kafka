@@ -5,7 +5,12 @@ import (
 	"time"
 	"context"
 	"golang.org/x/time/rate"
+<<<<<<< HEAD
     pub "github.com/edunx/public"
+=======
+	pub "github.com/edunx/public"
+	"time"
+>>>>>>> 9a84f0de0927d8630682753bdf0f80e16898e056
 )
 
 func (k *Kafka) Push( v interface{} ) {
@@ -19,7 +24,7 @@ func (k *Kafka) Push( v interface{} ) {
 		data = []byte(msg)
 	case []byte:
 		data = msg
-	case Message: //消耗挺大 不建议
+	case pub.Message: //消耗挺大 不建议
 		data = msg.Byte()
 	default:
         data = []byte(fmt.Sprintf("%v" , msg))

@@ -15,11 +15,18 @@ github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 h1:YEetp8
 github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21/go.mod h1:+020luEh2TKB4/GOp8oxxtq0Daoen/Cii55CzbTV6DU=
 github.com/eapache/queue v1.1.0 h1:YOEu7KNc61ntiQlcEeUIoDTJ2o8mQznoNvUhiigpIqc=
 github.com/eapache/queue v1.1.0/go.mod h1:6eCeP0CKFpHLu8blIFXhExK/dRa7WDZfr6jVFPTqq+I=
+<<<<<<< HEAD
 github.com/edunx/lua v1.0.10/go.mod h1:PSiDU9U+v7yvSL9nVehdOT/6rw35kq8qKGbgPnbS9yQ=
 github.com/edunx/lua v1.0.15 h1:OEDWiESVzlQ/JcqmR9px1AhWAjvhfMKgZ6g2ORo+e68=
 github.com/edunx/lua v1.0.15/go.mod h1:PSiDU9U+v7yvSL9nVehdOT/6rw35kq8qKGbgPnbS9yQ=
 github.com/edunx/public v0.1.7 h1:XFAoEwjzx0ufNBd8P233sKr0+QJT0w8Sx8eqITARBDM=
 github.com/edunx/public v0.1.7/go.mod h1:z8xWXSL7tnJCqhIAoUBdRFlaKLucigPcPgCXTKEpUwU=
+=======
+github.com/edunx/lua v1.0.10 h1:jpnVTdRYTToJfBfxYlVA8K5kZDu5TrX0kpqumWiXExw=
+github.com/edunx/lua v1.0.10/go.mod h1:PSiDU9U+v7yvSL9nVehdOT/6rw35kq8qKGbgPnbS9yQ=
+github.com/edunx/public v0.1.5 h1:reBjHWXgyhZfsBDoVGmSkmsaqvZwg+HgaSSJJ+scomw=
+github.com/edunx/public v0.1.5/go.mod h1:1SBru+kELFP7ekIxOX+YxQN4NsBZTX9ktLlTSHLGZ9Q=
+>>>>>>> 9a84f0de0927d8630682753bdf0f80e16898e056
 github.com/fortytw2/leaktest v1.3.0/go.mod h1:jDsjWgpAGjm2CA7WthBh/CdZYEPF31XHquHwclZch5g=
 github.com/frankban/quicktest v1.10.2/go.mod h1:K+q6oSqb0W0Ininfk863uOk1lMy69l/P6txr3mVT54s=
 github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
