@@ -55,11 +55,7 @@ func CreateKafkaUserData(L *lua.LState) int {
 	return 1
 }
 
-<<<<<<< HEAD
 func LuaInjectApi(L *lua.LState, parent *lua.LTable ) {
-=======
-func LuaInjectApi(L *lua.LState, parent *lua.LTable) {
->>>>>>> 9a84f0de0927d8630682753bdf0f80e16898e056
 	mt := L.NewTypeMetatable(MT)
 
 	//获取字段
