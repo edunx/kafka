@@ -1,12 +1,11 @@
 package kafka
 
 import (
+	"time"
 	"context"
-	"github.com/Shopify/sarama"
-	pub "github.com/edunx/public"
 	"strings"
 	"sync/atomic"
-	"time"
+	"github.com/Shopify/sarama"
     pub "github.com/edunx/public"
 )
 

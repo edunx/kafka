@@ -2,9 +2,8 @@ package kafka
 
 import (
 	"context"
-	pub "github.com/edunx/public"
 	"golang.org/x/time/rate"
-    pub "github.com/edunx/public"
+	pub "github.com/edunx/public"
 )
 
 type Limiter struct {
