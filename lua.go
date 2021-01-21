@@ -31,7 +31,7 @@ func CreateKafkaUserData(L *lua.LState) int {
 		C: Config{
 			name: opt.CheckString("name", "null"),
 			topic: opt.RawGetString("topic").String(),
-			addr:  opt.CheckSocketArray(L , "addr"),
+			addr:        opt.CheckSockets("addr" , L),
 			buffer:      opt.CheckInt("buffer", 4096),
 			num:         opt.CheckInt("num", 100),
 			flush:       opt.CheckInt("flush", 5),

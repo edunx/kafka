@@ -1,8 +1,8 @@
 package kafka
 
 import (
+    "fmt"
 	"context"
-	"github.com/spf13/cast"
 	"golang.org/x/time/rate"
 	"time"
 )
@@ -21,7 +21,7 @@ func (k *Kafka) Push( v interface{} ) {
 	case Message: //消耗挺大 不建议
 		data = msg.Byte()
 	default:
-		data = []byte(cast.ToString(msg))
+        data = []byte(fmt.Sprintf("%v" , msg))
 	}
 
 	k.buffer <- data
