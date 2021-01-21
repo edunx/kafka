@@ -181,7 +181,7 @@ func (t *Thread) start() error {
 	}
 
 	//开启处理缓存的handler
-	go t.Handler(t.ctx)
+	t.Handler(t.ctx)
 	t.status = OK
 
 	pub.Out.Err("%s kafka thread.id = %d start ok" , t.C.name , t.id)
