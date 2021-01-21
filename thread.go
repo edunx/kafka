@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+    pub "github.com/edunx/public"
 )
 
 // kafka 线程
@@ -56,7 +57,7 @@ func (t *Thread) Async( data []*sarama.ProducerMessage , size uint32) {
 		msg = t.Messages[i]
 		_ , _ , err = t.producer.SendMessage( msg )
 		if err != nil {
-			Out.Err("%s kafka thread.id=%d send message err:%v" , t.C.num , t.id , err)
+			pub.Out.Err("%s kafka thread.id=%d send message err:%v" , t.C.num , t.id , err)
 		} else {
 			atomic.AddUint64(t.total ,1)
 		}
@@ -79,7 +80,7 @@ func (t *Thread) SendMessage() bool { //定时发送消息
 		msg = t.Messages[i]
 		_ , _ , err = t.producer.SendMessage( msg )
 		if err != nil {
-			Out.Err("%s kafka thread.id=%d send message err:%v" , t.C.num , t.id , err)
+			pub.Out.Err("%s kafka thread.id=%d send message err:%v" , t.C.num , t.id , err)
 			rc = false
 		} else {
 			atomic.AddUint64(t.total ,1)
@@ -89,7 +90,7 @@ func (t *Thread) SendMessage() bool { //定时发送消息
 	}
 
 	t.count = 0
-	//Out.Debug("%s kafka thread id  %d send data success, length is %v, total is %v",t.C.name , t.id, i , *t.total)
+	//pub.Out.Debug("%s kafka thread id  %d send data success, length is %v, total is %v",t.C.name , t.id, i , *t.total)
 
 	return rc
 }
@@ -106,7 +107,7 @@ func (t *Thread) Handler(ctx context.Context) {
 
 		case <-ctx.Done():
 			t.SendMessage() //保证最后缓存数据不丢
-			Out.Err("%s kafka thread.id=%d exit successful" ,  t.C.name , t.id)
+			pub.Out.Err("%s kafka thread.id=%d exit successful" ,  t.C.name , t.id)
 			t.close()
 			return
 
@@ -143,9 +144,9 @@ func (t *Thread) close() {
 
 	//关闭client
 	if err := t.producer.Close(); err != nil {
-		Out.Err("%s thread.id=%d close error: %v", t.C.name , t.id , err)
+		pub.Out.Err("%s thread.id=%d close error: %v", t.C.name , t.id , err)
 	} else {
-		Out.Err("%s thread.id=%d close successful", t.C.name , t.id)
+		pub.Out.Err("%s thread.id=%d close successful", t.C.name , t.id)
 	}
 
 	t.status = CLOSE
@@ -175,7 +176,7 @@ func (t *Thread) start() error {
 
 	t.producer, err = sarama.NewSyncProducer(strings.Split(t.C.addr , ","), config)
 	if err != nil {
-		Out.Debug("%s kafka thread.id=%d create client error:%v",t.C.name, t.id, err)
+		pub.Out.Debug("%s kafka thread.id=%d create client error:%v",t.C.name, t.id, err)
 		return err
 	}
 
@@ -183,6 +184,6 @@ func (t *Thread) start() error {
 	go t.Handler(t.ctx)
 	t.status = OK
 
-	Out.Err("%s kafka thread.id = %d start ok" , t.C.name , t.id)
+	pub.Out.Err("%s kafka thread.id = %d start ok" , t.C.name , t.id)
 	return nil
 }

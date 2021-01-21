@@ -2,9 +2,10 @@ package kafka
 
 import (
     "fmt"
+	"time"
 	"context"
 	"golang.org/x/time/rate"
-	"time"
+    pub "github.com/edunx/public"
 )
 
 func (k *Kafka) Push( v interface{} ) {
@@ -77,15 +78,15 @@ func (k *Kafka) Ping() {
 	for id, t := range k.thread {
 		switch t.status {
 		case OK:
-			//Out.Info("%s kafka thread.id = %d up" , t.C.name , id)
+			//pub.Out.Info("%s kafka thread.id = %d up" , t.C.name , id)
 			continue
 
 		case CLOSE:
-			Out.Info("%s kafka thread.id = %d close" , t.C.name , id)
-			//Out.Err("%s kafka threads check: topic [%s], %d up, %d down", k.C.name , k.C.topic, k.count, k.C.thread-k.count)
+			pub.Out.Info("%s kafka thread.id = %d close" , t.C.name , id)
+			//pub.Out.Err("%s kafka threads check: topic [%s], %d up, %d down", k.C.name , k.C.topic, k.count, k.C.thread-k.count)
 		case ERROR:
 			k.thread[id].start()
-			//Out.Err("%s kafka thread.id = %d start" , k.C.name , id)
+			//pub.Out.Err("%s kafka thread.id = %d start" , k.C.name , id)
 		}
 	}
 
@@ -99,7 +100,7 @@ func (k *Kafka) Heartbeat() {
 	for {
 		select {
 		case <-k.ctx.Done():
-			Out.Err("%s kafka heartbeat exit", k.C.name)
+			pub.Out.Err("%s kafka heartbeat exit", k.C.name)
 			return
 		case <-tk.C:
 			k.Ping()
@@ -115,11 +116,11 @@ func (k *Kafka) Close() {
 }
 
 func (k *Kafka) Reload() {
-	Out.Err("%s kafka reload to close ..." , k.C.name)
+	pub.Out.Err("%s kafka reload to close ..." , k.C.name)
 	k.Close()
-	Out.Err("%s kafka reload  close end" , k.C.name)
+	pub.Out.Err("%s kafka reload  close end" , k.C.name)
 
 	if err := k.Start() ; err != nil {
-		Out.Err("%s kafka reload , start err: %v" , k.C.name , err)
+		pub.Out.Err("%s kafka reload , start err: %v" , k.C.name , err)
 	}
 }
