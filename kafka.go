@@ -48,7 +48,7 @@ func (k *Kafka) Start() error {
 	for i := 0; i < k.C.thread; i++ {
 
 		k.thread[i] = NewThread(i , k)
-		k.thread[i].start() //启动线程
+		go k.thread[i].start() //启动线程
 	}
 
 	go k.Heartbeat()
