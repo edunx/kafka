@@ -85,7 +85,7 @@ func (k *Kafka) Ping() {
 			pub.Out.Info("%s kafka thread.id = %d close" , t.C.name , id)
 			//pub.Out.Err("%s kafka threads check: topic [%s], %d up, %d down", k.C.name , k.C.topic, k.count, k.C.thread-k.count)
 		case ERROR:
-			k.thread[id].start()
+			go k.thread[id].start()
 			//pub.Out.Err("%s kafka thread.id = %d start" , k.C.name , id)
 		}
 	}
