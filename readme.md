@@ -85,3 +85,8 @@ type Transport interface{
 
 ```
 
+### 注意
+```lua
+  local ud = rock.kafka{}
+  会自动启动kafka线程
+```
