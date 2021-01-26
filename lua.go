@@ -3,7 +3,7 @@ package kafka
 import (
 	"github.com/edunx/lua"
 	"github.com/spf13/cast"
-	pub "github.com/edunx/public"
+	pub "github.com/edunx/rock-public-go"
 )
 
 const (

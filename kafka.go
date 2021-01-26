@@ -5,7 +5,7 @@ import (
 	"time"
 	"context"
 	"golang.org/x/time/rate"
-    pub "github.com/edunx/public"
+    pub "github.com/edunx/rock-public-go"
 )
 
 func (k *Kafka) Push( v interface{} ) {

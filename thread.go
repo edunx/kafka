@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"github.com/Shopify/sarama"
-    pub "github.com/edunx/public"
+    pub "github.com/edunx/rock-public-go"
 )
 
 // kafka 线程
