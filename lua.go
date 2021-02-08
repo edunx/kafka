@@ -79,6 +79,12 @@ func Get(L *lua.LState) int {
 			return 0
 		}))
 
+	case "push":
+		L.Push(L.NewFunction(func(L *lua.LState) int {
+			v := L.CheckString(1)
+			self.Push(v)
+			return 0
+		}))
 	default:
 		L.Push(lua.LNil)
 	}
