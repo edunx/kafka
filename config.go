@@ -3,7 +3,8 @@ package kafka
 import "context"
 
 const (
-	CLOSE      = iota
+	START      = iota
+	CLOSE
 	ERROR
 	OK
 )

@@ -35,6 +35,7 @@ func NewThread( idx int , k *Kafka ) Thread {
 	 	limiter: k.limiter,
 		buffer: k.buffer ,
 		total:  &k.send,
+		status: START,
 	 }
 
 	 for i := 0; i< thread.C.num; i++ {
@@ -180,10 +181,11 @@ func (t *Thread) start() error {
 		return err
 	}
 
+	t.status = OK
+	pub.Out.Err("%s kafka thread.id = %d start ok" , t.C.name , t.id)
+
 	//开启处理缓存的handler
 	t.Handler(t.ctx)
-	t.status = OK
 
-	pub.Out.Err("%s kafka thread.id = %d start ok" , t.C.name , t.id)
 	return nil
 }
