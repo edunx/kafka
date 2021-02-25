@@ -129,6 +129,5 @@ func (k *Kafka) Type() string {
 	return "kafka"
 }
 
-func (k *Kafka) Message() interface{} {
-	return nil
+func (k *Kafka) Proxy(t string  , v interface{} ){
 }
