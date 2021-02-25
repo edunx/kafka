@@ -21,6 +21,9 @@ func (k *Kafka) Push( v interface{} ) {
 		data = msg
 	case pub.Message: //消耗挺大 不建议
 		data = msg.Byte()
+	case pub.Any:
+		fn := (*func() []byte)(msg.Handler)
+		data = (*fn)()
 	default:
         data = []byte(fmt.Sprintf("%v" , msg))
 	}
@@ -123,4 +126,8 @@ func (k *Kafka) Reload() {
 	if err := k.Start() ; err != nil {
 		pub.Out.Err("%s kafka reload , start err: %v" , k.C.name , err)
 	}
+}
+
+func (k *Kafka) Type() string {
+	return "kafka"
 }
