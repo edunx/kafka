@@ -1,11 +1,12 @@
 package kafka
 
 import (
-    "fmt"
-	"time"
 	"context"
+	"fmt"
+	pub "github.com/edunx/rock-public-go"
+	tp "github.com/edunx/rock-transport-go"
 	"golang.org/x/time/rate"
-    pub "github.com/edunx/rock-public-go"
+	"time"
 )
 
 func (k *Kafka) Push( v interface{} ) {
@@ -19,7 +20,7 @@ func (k *Kafka) Push( v interface{} ) {
 		data = []byte(msg)
 	case []byte:
 		data = msg
-	case pub.Message: //消耗挺大 不建议
+	case tp.Message: //消耗挺大 不建议
 		data = msg.Byte()
 	default:
         data = []byte(fmt.Sprintf("%v" , msg))
@@ -129,5 +130,5 @@ func (k *Kafka) Type() string {
 	return "kafka"
 }
 
-func (k *Kafka) Proxy(t string  , v interface{} ){
+func (k *Kafka) Proxy( t string  , v interface{} ){
 }

@@ -16,7 +16,7 @@ go get github.com/edunx/kafka
 ### 配置选项
 
 ```lua
-local userdata = rock.kafka{
+local userdata = rock.kafka.producer{
         name="error-kafka",
         addr="127.0.0.1:9092",
         timeout=60,
@@ -70,23 +70,22 @@ ud.name = "new-name"
 
 ### go 内部调用
 
-```go
-kafka 的 userdata.value 是interface{}类型 配置应用的时候 实现了public.transport的接口
+```golang
+    import (
+        kafka "github.com/ednux/rock-kafka-go"
+    )
 
-type Transport interface{
-	Userdata //内部Userdata类型
-    
-	Start() error
-	Close()
-	Reload()
-	
-	push(interface{})
+    //注入lua api
+    kafka.LuaInjectApi(L , rock)
+
+    //满足transport.Tunnel 接口
+    obj.Push( v )
 }
 
 ```
 
 ### 注意
 ```lua
-  local ud = rock.kafka{}
-  会自动启动kafka线程
+  local ud = rock.kafka.producer{}
+  --会自动启动kafka线程
 ```
