@@ -6,5 +6,5 @@ func LuaInjectApi(L *lua.LState , parent *lua.LTable) {
 	kTab := L.CreateTable(0 , 1)
 	LuaInjectProducerApi(L , kTab)
 
-	L.SetField(kTab , "kafka" , parent)
+	L.SetField(parent, "kafka" , kTab)
 }

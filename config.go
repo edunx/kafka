@@ -23,7 +23,7 @@ type Config struct {
 	heartbeat   int    // 心跳检测周期
 }
 
-type Kafka struct {
+type Producer struct {
 
 	C Config
 

@@ -10,10 +10,10 @@ const (
 	PRODUCERMT string = "ROCK_KAFKA_PRODUCER_GO_MT"
 )
 
-func CheckKafkaUserData(L *lua.LState , idx int) *Kafka {
+func CheckKafkaUserData(L *lua.LState , idx int) *Producer {
 	ud := L.CheckUserData(idx)
 	switch k := ud.Value.(type) {
-	case *Kafka:
+	case *Producer:
 		return k
 	default:
 		L.ArgError(idx ,"args " + cast.ToString(idx) + " must kafka userdata")
@@ -21,13 +21,13 @@ func CheckKafkaUserData(L *lua.LState , idx int) *Kafka {
 	}
 }
 
-func (k *Kafka) ToUserData(L *lua.LState) *lua.LUserData {
-	return L.NewUserDataByInterface(k , PRODUCERMT)
+func (p *Producer) ToUserData(L *lua.LState) *lua.LUserData {
+	return L.NewUserDataByInterface(p, PRODUCERMT)
 }
 
 func CreateProducerUserData(L *lua.LState) int {
 	opt := L.CheckTable(1)
-	kfk := &Kafka{
+	kfk := &Producer{
 
 		C: Config{
 			name: opt.CheckString("name", "null"),

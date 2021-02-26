@@ -25,7 +25,7 @@ type Thread struct {
 	total           *uint64 //kafka total 指针
 }
 
-func NewThread( idx int , k *Kafka ) Thread {
+func NewThread( idx int , k *Producer) Thread {
 	thread := Thread{
 		C: k.C,
 		id: idx ,

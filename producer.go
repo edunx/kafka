@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-func (k *Kafka) Push( v interface{} ) {
-	if k.close {
+func (p *Producer) Push( v interface{} ) {
+	if p.close {
 		time.Sleep(time.Second)
 	}
 
@@ -26,57 +26,57 @@ func (k *Kafka) Push( v interface{} ) {
         data = []byte(fmt.Sprintf("%v" , msg))
 	}
 
-	k.buffer <- data
+	p.buffer <- data
 }
 
 // 开始传输
-func (k *Kafka) Start() error {
+func (p *Producer) Start() error {
 
-	k.thread = make([]Thread, k.C.thread)
-	k.buffer = make(chan []byte , k.C.buffer)
-	k.ctx , k.cancel = context.WithCancel(context.Background())
-	k.limiter = &Limiter{}
+	p.thread = make([]Thread, p.C.thread)
+	p.buffer = make(chan []byte , p.C.buffer)
+	p.ctx , p.cancel = context.WithCancel(context.Background())
+	p.limiter = &Limiter{}
 
 	//设置限速
-	if k.C.limit > 0 {
-		k.limiter.limit = rate.NewLimiter(rate.Limit(k.C.limit) , k.C.limit * 2)
-		k.limiter.ctx , _ = context.WithCancel(context.TODO())
+	if p.C.limit > 0 {
+		p.limiter.limit = rate.NewLimiter(rate.Limit(p.C.limit) , p.C.limit * 2)
+		p.limiter.ctx , _ = context.WithCancel(context.TODO())
 	} else {
-		k.limiter.limit = nil
+		p.limiter.limit = nil
 	}
 
 	//创建并启动程序
-	for i := 0; i < k.C.thread; i++ {
+	for i := 0; i < p.C.thread; i++ {
 
-		k.thread[i] = NewThread(i , k)
-		go k.thread[i].start() //启动线程
+		p.thread[i] = NewThread(i , p)
+		go p.thread[i].start() //启动线程
 	}
 
-	go k.Heartbeat()
+	go p.Heartbeat()
 
 	return nil
 }
 
 // 线程状态检测
-func (k *Kafka) Status() bool {
+func (p *Producer) Status() bool {
 	inactive := 0
 
-	for _ , v := range k.thread {
+	for _ , v := range p.thread {
 		if v.status != OK {
 			inactive++
 		}
 	}
 
-	if inactive == k.C.thread {
+	if inactive == p.C.thread {
 		return false
 	}
 
 	return  true
 }
 
-func (k *Kafka) Ping() {
+func (p *Producer) Ping() {
 
-	for id, t := range k.thread {
+	for id, t := range p.thread {
 		switch t.status {
 		case OK:
 			//pub.Out.Info("%s kafka thread.id = %d up" , t.C.name , id)
@@ -84,51 +84,51 @@ func (k *Kafka) Ping() {
 
 		case CLOSE:
 			pub.Out.Info("%s kafka thread.id = %d close" , t.C.name , id)
-			//pub.Out.Err("%s kafka threads check: topic [%s], %d up, %d down", k.C.name , k.C.topic, k.count, k.C.thread-k.count)
+			//pub.Out.Err("%s kafka threads check: topic [%s], %d up, %d down", p.C.name , p.C.topic, p.count, p.C.thread-p.count)
 		case ERROR:
-			go k.thread[id].start()
-			//pub.Out.Err("%s kafka thread.id = %d start" , k.C.name , id)
+			go p.thread[id].start()
+			//pub.Out.Err("%s kafka thread.id = %d start" , p.C.name , id)
 		}
 	}
 
 }
 
 // 心跳检测
-func (k *Kafka) Heartbeat() {
-	tk := time.NewTicker( time.Second * time.Duration(k.C.heartbeat))
+func (p *Producer) Heartbeat() {
+	tk := time.NewTicker( time.Second * time.Duration(p.C.heartbeat))
 	defer tk.Stop()
 
 	for {
 		select {
-		case <-k.ctx.Done():
-			pub.Out.Err("%s kafka heartbeat exit", k.C.name)
+		case <-p.ctx.Done():
+			pub.Out.Err("%s kafka heartbeat exit", p.C.name)
 			return
 		case <-tk.C:
-			k.Ping()
+			p.Ping()
 		}
 	}
 }
 
 // 关闭连接
-func (k *Kafka) Close() {
-	k.cancel()
-	k.close = true
+func (p *Producer) Close() {
+	p.cancel()
+	p.close = true
 	time.Sleep(500 * time.Millisecond)
 }
 
-func (k *Kafka) Reload() {
-	pub.Out.Err("%s kafka reload to close ..." , k.C.name)
-	k.Close()
-	pub.Out.Err("%s kafka reload  close end" , k.C.name)
+func (p *Producer) Reload() {
+	pub.Out.Err("%s kafka reload to close ..." , p.C.name)
+	p.Close()
+	pub.Out.Err("%s kafka reload  close end" , p.C.name)
 
-	if err := k.Start() ; err != nil {
-		pub.Out.Err("%s kafka reload , start err: %v" , k.C.name , err)
+	if err := p.Start() ; err != nil {
+		pub.Out.Err("%s kafka reload , start err: %v" , p.C.name , err)
 	}
 }
 
-func (k *Kafka) Type() string {
+func (p *Producer) Type() string {
 	return "kafka"
 }
 
-func (k *Kafka) Proxy( t string  , v interface{} ){
+func (p *Producer) Proxy( t string  , v interface{} ){
 }
