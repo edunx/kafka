@@ -2,7 +2,6 @@ package kafka
 
 import (
 	"github.com/edunx/lua"
-	"github.com/spf13/cast"
 	pub "github.com/edunx/rock-public-go"
 )
 
@@ -10,16 +9,6 @@ const (
 	PRODUCERMT string = "ROCK_KAFKA_PRODUCER_GO_MT"
 )
 
-func CheckKafkaUserData(L *lua.LState , idx int) *Producer {
-	ud := L.CheckUserData(idx)
-	switch k := ud.Value.(type) {
-	case *Producer:
-		return k
-	default:
-		L.ArgError(idx ,"args " + cast.ToString(idx) + " must kafka userdata")
-		return nil
-	}
-}
 
 func (p *Producer) ToUserData(L *lua.LState) *lua.LUserData {
 	return L.NewUserDataByInterface(p, PRODUCERMT)
@@ -68,7 +57,7 @@ func LuaInjectProducerApi(L *lua.LState, parent *lua.LTable ) {
 }
 
 func Get(L *lua.LState) int {
-	self := CheckKafkaUserData(L, 1)
+	self := CheckProducerUserData(L, 1)
 	name := L.CheckString(2)
 	switch name {
 
