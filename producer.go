@@ -9,6 +9,37 @@ import (
 	"time"
 )
 
+//name        string
+//addr        string // 192.168.1.1:9092,192.168.1.2:9092
+//timeout     int    // not used
+//topic       string
+//num         int // 每个线程每次发送的数据条数
+//flush       int // 强制发送数据间隔时长
+//buffer      int // 缓冲区大小
+//thread      int
+//limit       int
+//compression string // 压缩方式, GZIP,LZ4,None,Snappy,ZSTD
+//heartbeat   int    // 心跳检测周期
+
+func (p *Producer) NewConfig( name , addr , topic , compression , log string ,
+	timeout , num , flush , buffer , thread , limit , heartbeat ,level int ) {
+	pub.SetOutput( log , level )
+
+	p.C = Config{
+		name: name ,
+		addr: addr ,
+		topic: topic ,
+		compression: compression,
+		timeout: timeout,
+		num:num,
+		flush: flush,
+		buffer: buffer,
+		thread: thread,
+		limit:limit,
+		heartbeat: heartbeat,
+	}
+}
+
 func (p *Producer) Push( v interface{} ) {
 	if p.close {
 		time.Sleep(time.Second)
