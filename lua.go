@@ -2,8 +2,8 @@ package kafka
 
 import "github.com/edunx/lua"
 
-func LuaInjectApi(L *lua.LState , parent *lua.LTable) {
+func LuaInjectApi(L *lua.LState , parent *lua.UserKV) {
 	kfk  := &lua.UserKV{}
 	kfk.Set("producer" , lua.NewGFunction( createProducerUserData ))
-	L.SetField(parent, "kafka" , kfk)
+	parent.Set("kafka" , kfk)
 }
