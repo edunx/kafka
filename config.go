@@ -1,6 +1,10 @@
 package kafka
 
-import "context"
+import (
+	"context"
+	"github.com/edunx/lua"
+	"time"
+)
 
 const (
 	START      = iota
@@ -24,6 +28,7 @@ type Config struct {
 }
 
 type Producer struct {
+	lua.Super
 
 	C Config
 
@@ -35,5 +40,6 @@ type Producer struct {
 	ctx     context.Context
 	cancel  context.CancelFunc
 	buffer  chan []byte
-	close   bool
+	uptime  time.Time
+	state   lua.LightUserDataStatus
 }

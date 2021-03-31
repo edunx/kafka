@@ -98,6 +98,7 @@ func (t *Thread) SendMessage() bool { //定时发送消息
 
 func (t *Thread) Handler(ctx context.Context) {
 	var line []byte
+	var close bool
 	var msg  *sarama.ProducerMessage
 
 	tk := time.NewTicker( time.Second * time.Duration(t.C.flush))
@@ -113,16 +114,21 @@ func (t *Thread) Handler(ctx context.Context) {
 			return
 
 		//读取缓存区
-		case line = <-t.buffer:
+		case line  , close = <-t.buffer:
+			if !close {
+				msg = t.Messages[t.count]
+				msg.Value = sarama.ByteEncoder(line)
 
-			msg = t.Messages[t.count]
-			msg.Value = sarama.ByteEncoder(line)
-
-			t.Messages[t.count] = msg
-			t.count++
-			if t.count == uint32(t.C.num) {
-				goto Send
+				t.Messages[t.count] = msg
+				t.count++
+				if t.count == uint32(t.C.num) {
+					goto Send
+				}
+			} else{
+				pub.Out.Err("%s kafka thread.id=%d buffer channel close",  t.C.name , t.id)
+				t.close()
 			}
+
 
 		//定时任务触发
 		case <-tk.C:

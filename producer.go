@@ -3,9 +3,11 @@ package kafka
 import (
 	"context"
 	"fmt"
+	"github.com/edunx/lua"
 	pub "github.com/edunx/rock-public-go"
 	tp "github.com/edunx/rock-transport-go"
 	"golang.org/x/time/rate"
+	"sync/atomic"
 	"time"
 )
 
@@ -40,8 +42,13 @@ func (p *Producer) NewConfig( name , addr , topic , compression , log string ,
 	}
 }
 
+func (p *Producer) Write(v interface{} ) error {
+	p.Push(v)
+	return nil
+}
+
 func (p *Producer) Push( v interface{} ) {
-	if p.close {
+	if p.state != lua.RUNNING {
 		time.Sleep(time.Second)
 	}
 
@@ -57,7 +64,8 @@ func (p *Producer) Push( v interface{} ) {
         data = []byte(fmt.Sprintf("%v" , msg))
 	}
 
-	p.buffer <- data
+	atomic.AddUint64(&p.recv , uint64(len(data)))
+	p.buffer <-data
 }
 
 // 开始传输
@@ -89,7 +97,7 @@ func (p *Producer) Start() error {
 }
 
 // 线程状态检测
-func (p *Producer) Status() bool {
+func (p *Producer) State() bool {
 	inactive := 0
 
 	for _ , v := range p.thread {
@@ -141,10 +149,11 @@ func (p *Producer) Heartbeat() {
 }
 
 // 关闭连接
-func (p *Producer) Close() {
+func (p *Producer) Close() error {
 	p.cancel()
-	p.close = true
+	p.state = lua.CLOSE
 	time.Sleep(500 * time.Millisecond)
+	return nil
 }
 
 func (p *Producer) Reload() {
@@ -161,5 +170,28 @@ func (p *Producer) Type() string {
 	return "kafka"
 }
 
-func (p *Producer) Proxy( t string  , v interface{} ){
+func (p *Producer) Name() string {
+	return p.C.name
+}
+
+func (p *Producer) ToJson() ( []byte , error ) {
+	buff := lua.NewJsonBuffer()
+	buff.Start("kafka.producer")
+	buff.WriteKV("name" , p.C.name , false)
+	buff.WriteKV("addr" , p.C.addr, false)
+	buff.WriteKV( "topic" , p.C.topic , false)
+	buff.WriteKI( "num" , p.C.num, false)
+	buff.WriteKI( "flush" , p.C.flush, false)
+	buff.WriteKI( "thread" , p.C.thread, false)
+	buff.WriteKI( "limit" , p.C.limit, false)
+	buff.WriteKI( "heartbeat" , p.C.heartbeat, false)
+	buff.WriteKI("timeout" , p.C.timeout, false)
+	buff.WriteKV("compression" , p.C.compression , true)
+	buff.End()
+	return buff.Bytes() , nil
+}
+
+func (p *Producer) Status() (string , error) {
+	return fmt.Sprintf("name:%s , status:%s , uptime:%s , recv:%d , send:%d",
+		p.Name() , p.state.String() , p.uptime , p.recv, p.send) , nil
 }
