@@ -183,7 +183,7 @@ func (t *Thread) start() error {
 
 	t.producer, err = sarama.NewSyncProducer(strings.Split(t.C.addr , ","), config)
 	if err != nil {
-		pub.Out.Debug("%s kafka thread.id=%d create client error:%v",t.C.name, t.id, err)
+		pub.Out.Debug("%s kafka thread.id=%d create agent error:%v",t.C.name, t.id, err)
 		return err
 	}
 
