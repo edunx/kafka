@@ -98,7 +98,7 @@ func (t *Thread) SendMessage() bool { //定时发送消息
 
 func (t *Thread) Handler(ctx context.Context) {
 	var line []byte
-	var close bool
+	var ok   bool
 	var msg  *sarama.ProducerMessage
 
 	tk := time.NewTicker( time.Second * time.Duration(t.C.flush))
@@ -114,8 +114,8 @@ func (t *Thread) Handler(ctx context.Context) {
 			return
 
 		//读取缓存区
-		case line  , close = <-t.buffer:
-			if !close {
+		case line  , ok = <-t.buffer:
+			if ok {
 				msg = t.Messages[t.count]
 				msg.Value = sarama.ByteEncoder(line)
 

@@ -91,11 +91,11 @@ func (p *Producer) Start() error {
 		go p.thread[i].start() //启动线程
 	}
 
-
-	go p.Heartbeat()
-
 	//启动成功
 	p.state = lua.RUNNING
+	p.uptime = time.Now()
+
+	go p.Heartbeat()
 	return nil
 }
 
